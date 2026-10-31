@@ -1,0 +1,15 @@
+fastapi
+uvicorn[standard]
+mcp[cli]
+langgraph
+langchain
+langchain-openai
+google-api-python-client
+google-auth
+google-auth-oauthlib
+google-auth-httplib2
+cryptography
+sqlalchemy
+"psycopg[binary]"
+pydantic-settings
+supabase
