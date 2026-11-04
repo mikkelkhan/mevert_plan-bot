@@ -15,6 +15,7 @@ from app.database.token_repository import TokenRepository
 SCOPES = [
     "https://www.googleapis.com/auth/gmail.modify",
     "https://www.googleapis.com/auth/calendar.events",
+    "https://www.googleapis.com/auth/calendar.calendarlist.readonly",
 ]
 
 PROJECT_ROOT = Path(__file__).resolve().parents[2]

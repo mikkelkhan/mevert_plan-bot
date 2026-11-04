@@ -13,3 +13,4 @@ sqlalchemy
 "psycopg[binary]"
 pydantic-settings
 supabase
+langchain_mcp_adapters
