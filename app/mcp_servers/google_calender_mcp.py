@@ -57,4 +57,13 @@ def get_upcoming_events(
     ]
 
 if __name__ == "__main__":
+    import logging
+    import sys
+
+    logging.basicConfig(
+        level=logging.INFO,
+        stream=sys.stderr
+    )
+
+    logging.info("Calender MCP server starting...")
     mcp.run()

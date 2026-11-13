@@ -159,4 +159,13 @@ def get_unread_emails(max_results: int = 10) -> list[dict]:
 
 
 if __name__ == "__main__":
+    import logging
+    import sys
+
+    logging.basicConfig(
+        level=logging.INFO,
+        stream=sys.stderr
+    )
+
+    logging.info("Gmail MCP server starting...")
     mcp.run()
