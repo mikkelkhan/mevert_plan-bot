@@ -11,6 +11,7 @@ class Settings(BaseSettings):
     GROQ_API_KEY:str
     MODEL_NAME:str
     TELEGRAM_BOT_TOKEN: str
+    WEBHOOK_SECRET_TOKEN: str
 
     model_config = SettingsConfigDict(
         env_file=".env",

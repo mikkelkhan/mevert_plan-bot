@@ -16,3 +16,4 @@ supabase
 langchain_mcp_adapters
 langchain_groq
 python-telegram-bot
+"python-telegram-bot[webhooks]"
