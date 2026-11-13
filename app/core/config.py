@@ -8,6 +8,9 @@ class Settings(BaseSettings):
     GOOGLE_CLIENT_ID: str
     GOOGLE_CLIENT_SECRET: str
     FERNET_KEY: str
+    GROQ_API_KEY:str
+    MODEL_NAME:str
+    TELEGRAM_BOT_TOKEN: str
 
     model_config = SettingsConfigDict(
         env_file=".env",

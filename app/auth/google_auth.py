@@ -1,10 +1,11 @@
+import sys
 from datetime import timezone
 from google.auth.transport.requests import Request
 from google.auth.exceptions import RefreshError
 from google.oauth2.credentials import Credentials
 from google_auth_oauthlib.flow import InstalledAppFlow
 from googleapiclient.discovery import build
-from datetime import timezone
+
 from pathlib import Path
 
 from app.core.config import settings
@@ -64,22 +65,31 @@ def save_credentials(email, credentials):
 def get_google_credentials():
     """Load saved credentials and refresh automatically."""
 
+    print("[AUTH 1] Starting credential loading", file=sys.stderr, flush=True)
+
     email = settings.GOOGLE_ACCOUNT_EMAIL
 
+    print("[AUTH 2] Connecting to database", file=sys.stderr, flush=True)
+
     with SessionLocal() as db:
+        print("[AUTH 3] Fetching tokens from database", file=sys.stderr, flush=True)
+
         token_data = TokenRepository.get_tokens(db, email)
 
+        print("[AUTH 4] Token query completed", file=sys.stderr, flush=True)
+
     if not token_data:
-        raise RuntimeError(
-            "Google account not connected. "
-            "Run initial OAuth authorization first."
-        )
-    expiry = token_data["expiry"]
+        raise RuntimeError("Google account not connected.")
+
+    print("[AUTH 5] Token data found", file=sys.stderr, flush=True)
 
     expiry = token_data["expiry"]
 
     if expiry is not None and expiry.tzinfo is not None:
         expiry = expiry.astimezone(timezone.utc).replace(tzinfo=None)
+
+    print("[AUTH 6] Creating Credentials object", file=sys.stderr, flush=True)
+
     credentials = Credentials(
         token=token_data["access_token"],
         refresh_token=token_data["refresh_token"],
@@ -90,13 +100,23 @@ def get_google_credentials():
         expiry=expiry,
     )
 
+    print("[AUTH 7] Credentials object created", file=sys.stderr, flush=True)
+
     if credentials.valid:
+        print("[AUTH 8] Credentials are valid", file=sys.stderr, flush=True)
         return credentials
 
     if credentials.expired and credentials.refresh_token:
+
+        print("[AUTH 9] Refreshing Google token", file=sys.stderr, flush=True)
+
         try:
             credentials.refresh(Request())
+
             save_credentials(email, credentials)
+
+            print("[AUTH 10] Token refreshed successfully", file=sys.stderr, flush=True)
+
             return credentials
 
         except RefreshError as exc:
@@ -105,10 +125,7 @@ def get_google_credentials():
                 "Initial OAuth authorization required again."
             ) from exc
 
-    raise RuntimeError(
-        "Google credentials unavailable. "
-        "Initial OAuth authorization required again."
-    )
+    raise RuntimeError("Google credentials unavailable.")
 
 
 def get_gmail_service():
@@ -119,3 +136,7 @@ def get_gmail_service():
 def get_calendar_service():
     credentials = get_google_credentials()
     return build("calendar", "v3", credentials=credentials)
+
+
+# if __name__ == "__main__":
+#     authorize_google_account()

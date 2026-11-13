@@ -1,7 +1,7 @@
-from mcp.server import MCPServer
+from mcp.server.fastmcp import FastMCP
 from app.auth.google_auth import get_calendar_service
 from datetime import datetime, timezone
-mcp = MCPServer("Google Calender Server")
+mcp = FastMCP("Google Calender Server")
 
 @mcp.tool()
 def list_calendars() -> list[dict]:
